@@ -1,38 +1,108 @@
-# JWT Authentication & Role-Based Access Control (RBAC) Security Lab
+# 🛡️ JWT Authentication & Role-Based Access Control (RBAC) Security Lab
 
-A modern, interactive web application demonstrating stateless **JSON Web Token (JWT) Authentication** and **Role-Based Access Control (RBAC)** route guards.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Stack: Vanilla JS ES6+](https://img.shields.io/badge/Stack-HTML5%20%7C%20ES6%2B%20JS-yellow.svg)]()
+[![Security: JWT & RBAC](https://img.shields.io/badge/Security-JWT%20%26%20RBAC-success.svg)]()
+[![Vercel: Ready](https://img.shields.io/badge/Vercel-Deployment%20Ready-black.svg)]()
 
----
-
-## 🌟 Key Features
-
-- **Stateless JWT Engine**: Issue and inspect Base64URL-encoded tokens (`Header.Payload.Signature`) with HMAC-SHA256 integrity verification.
-- **Payload Tampering Simulator**: Real-time test demonstrating signature guard failures when unauthorized claims are modified.
-- **Configurable Client Storage**: Toggle between `localStorage`, `sessionStorage`, and `In-Memory` state token storage.
-- **RBAC & Route Protection**: Pre-configured user roles (**Admin**, **Editor**, **Viewer**, **Guest**) with protected route guards and dynamic UI permission rendering.
-- **HTTP Authorization Interceptor**: Live request console showcasing `Authorization: Bearer <token>` header injection.
-- **Local Storage State Persistence**: Created content articles and audit logs persist across browser refreshes.
-- **Clean Light Design**: Zero glow, flat-bordered slate design system.
+A comprehensive, interactive web application and security laboratory demonstrating stateless **JSON Web Token (JWT)** authentication, cryptographic signature integrity verification, and **Role-Based Access Control (RBAC)** protected route guards.
 
 ---
 
-## 📁 Repository Structure
+## 📋 Course Outcomes (CO) & Bloom's Taxonomy Mappings
+
+| Course Outcome | Description | Bloom's Taxonomy Level |
+| :--- | :--- | :--- |
+| **CO1** | Understand web authentication & authorization paradigms | **BT1 (Remembering & Understanding)** |
+| **CO2** | Implement stateless token-based sessions & RBAC permission models | **BT2 (Applying & Analyzing)** |
+| **CO3** | Secure route guards, validate cryptographic signatures, and manage client storage | **BT3 (Evaluating & Implementing)** |
+
+---
+
+## 🎯 Key Objectives & Core Learning Outcomes
+
+1. **Stateless Authentication Architecture**: Understand how JWTs replace traditional server-side session stores in distributed, scalable web systems.
+2. **Cryptographic Token Verification**: Analyze Base64URL encoding vs. encryption, inspect token claims, and verify HMAC-SHA256 digital signatures to detect payload tampering.
+3. **Granular RBAC Authorization**: Enforce role-based access control across distinct user tiers (**Admin**, **Editor**, **Viewer**, **Guest**) with dynamic UI element rendering and route interception.
+4. **Secure Token Storage Management**: Evaluate client-side token storage strategies (`localStorage`, `sessionStorage`, and `In-Memory State`).
+5. **HTTP Authorization Interceptors**: Visualize how client-side applications attach `Authorization: Bearer <token>` HTTP headers for server middleware validation.
+
+---
+
+## 🏗️ Conceptual Architecture & Authentication Flow
+
+```
++----------------+            1. POST /login (Credentials)          +----------------+
+|                | -----------------------------------------------> |                |
+|                |                                                  |                |
+|  Client App    |            2. Return Signed JWT (Header.Payload.Sig) |  Server / Auth  |
+|  (Browser SPA) | <----------------------------------------------- |    Engine      |
+|                |                                                  |                |
+|                |            3. Store Token (localStorage / Session) |                |
++----------------+                                                  +----------------+
+        |
+        | 4. GET /api/admin/users
+        |    Header: "Authorization: Bearer <token>"
+        v
++------------------------------------------------------------------------------------+
+|                             Server Authorization Middleware                        |
+|                                                                                    |
+| 1. Extract Token  ---> 2. Verify HMAC-SHA256 Signature  ---> 3. Check Expiry (exp) |
+|                                                                                    |
+| 4. Validate Role/Permission Claims ---> [200 OK] or [401 Unauthorized / 403 Forbidden]
++------------------------------------------------------------------------------------+
+```
+
+---
+
+## 🌟 Highlighted Features
+
+### 🔑 1. Interactive JWT Debugger & Inspector
+- **3-Part Structure Breakdown**: Visual color-coded decomposition:
+  - **Header** (Pink `#e11d48`): Signing algorithm (`HS256`) and token type (`JWT`).
+  - **Payload** (Purple `#9333ea`): Claims (`sub`, `name`, `email`, `role`, `permissions`, `iat`, `exp`).
+  - **Signature** (Cyan `#0284c7`): Cryptographic HMAC-SHA256 signature hash.
+- **Payload Tampering Simulator**: Test altering token claims (e.g. escalating role from `Viewer` to `Admin` in the browser) without updating the secret key signature. Demonstrates how cryptographic signature verification detects tampering and rejects unauthorized access.
+- **Real-Time Expiration Countdown**: Live TTL timer tracking token validity seconds.
+
+### 🛡️ 2. Role-Based Access Control (RBAC) & Protected Route Guards
+- **User Tiers**:
+  - 👑 **Admin** (`admin@system.io`): Full administrative rights (`read`, `create`, `edit`, `delete`, `manage:users`, `view:audit_logs`).
+  - ✍️ **Editor** (`editor@system.io`): Content creation & modification rights (`read`, `create`, `edit`).
+  - 👁️ **Viewer** (`viewer@system.io`): Read-only privileges (`read`).
+  - 🔒 **Guest**: Unauthenticated user state.
+- **Protected Route Guards**: Routes like `/admin` (Admin Security Console) and `/audit-logs` (System Audit Logs) intercept unauthorized users and trigger a styled **403 Access Denied** screen.
+- **Dynamic UI Rendering**: Action buttons (**Create**, **Edit**, **Delete**) in the Content Studio dynamically enable or lock based on active token claims (e.g., **Delete** is exclusively unlocked for Admin).
+
+### 📡 3. HTTP Interceptor Console
+- Simulates client API requests adding `Authorization: Bearer <token>` headers.
+- Evaluates server response codes (`200 OK`, `401 Unauthorized`, `403 Forbidden`).
+
+### 💾 4. Local Storage State Persistence
+- All created, edited, or deleted content articles and security audit logs automatically persist in `localStorage` across page reloads. Includes a **"Reset Articles"** button to restore initial lab defaults at any time.
+
+### 🎨 5. Clean Light Design System
+- Crisp, professional slate theme (`#f8fafc` background, `#ffffff` cards, `#0f172a` typography) with **zero glow shadows** and flat 1px solid borders.
+
+---
+
+## 📁 Repository Directory Tree
 
 ```
 jwt-rbac/
 ├── css/
 │   └── styles.css          # Clean light theme design system
 ├── js/
-│   ├── app.js              # Central application router & event controller
-│   ├── authState.js        # Auth state store & token expiration timer
+│   ├── app.js              # Application router & event coordinator
+│   ├── authState.js        # Central Auth State Provider & timer engine
 │   ├── components/
-│   │   ├── navbar.js       # Top navigation & storage selector
-│   │   ├── sidebar.js      # View navigation menu
-│   │   ├── loginModal.js   # Quick user identity switcher & login modal
-│   │   └── toast.js        # Notification system
+│   │   ├── navbar.js       # Top navigation bar & storage selector
+│   │   ├── sidebar.js      # Navigation menu
+│   │   ├── loginModal.js   # Quick role identity switcher & login modal
+│   │   └── toast.js        # Toast notification system
 │   ├── utils/
-│   │   ├── jwtHelper.js    # Base64URL encoder/decoder & HMAC signing logic
-│   │   └── mockData.js     # Demo users & role permissions map
+│   │   ├── jwtHelper.js    # Base64URL encoder/decoder & HMAC SHA-256 logic
+│   │   └── mockData.js     # Demo user accounts & permission matrices
 │   └── views/
 │       ├── dashboardView.js
 │       ├── contentView.js
@@ -45,63 +115,24 @@ jwt-rbac/
 │       └── forbiddenView.js
 ├── index.html
 ├── package.json
-├── vercel.json             # Vercel deployment routing configuration
+├── vercel.json             # Vercel static routing configuration
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-## 🚀 How to Deploy on Vercel
+## 🚀 Quickstart & Local Development
 
-### Option 1: Via Vercel Dashboard (Recommended)
-1. Push this repository to your GitHub account (see instructions below).
-2. Go to [Vercel Dashboard](https://vercel.com/new).
-3. Click **Import Repository** and select your `jwt-rbac` repository.
-4. Leave **Framework Preset** as **Other** (Static Site).
-5. Click **Deploy**. Vercel will automatically build and publish your app with SSL enabled!
+No heavy build tools or Node.js runtime required! The application runs natively in any modern browser.
 
-### Option 2: Via Vercel CLI
+### Using Python HTTP Server:
 ```bash
-npm i -g vercel
-vercel
-```
-
----
-
-## 💻 How to Push to GitHub
-
-Run the following commands in your terminal inside the project directory:
-
-```bash
-# 1. Initialize Git repository (if not already done)
-git init
-
-# 2. Add all files and commit
-git add .
-git commit -m "Initial commit: JWT Auth & RBAC Security Lab"
-
-# 3. Rename branch to main
-git branch -M main
-
-# 4. Link your remote GitHub repository (Replace YOUR_USERNAME and YOUR_REPO)
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-
-# 5. Push to GitHub
-git push -u origin main
-```
-
----
-
-## 🛠️ Local Development & Running
-
-Simply serve the directory using any static web server:
-
-```bash
-# Using Python
 python -m http.server 8080
+```
 
-# Or using Node serve / Live Server
+### Using Node `serve` or Live Server:
+```bash
 npx serve .
 ```
 
@@ -109,5 +140,37 @@ Open `http://localhost:8080` in your web browser.
 
 ---
 
+## 📤 GitHub & Vercel Deployment Instructions
+
+### Step 1: Push Repository to GitHub
+
+```bash
+# 1. Initialize git (if not initialized)
+git init
+
+# 2. Stage all files and commit
+git add .
+git commit -m "Initial commit: JWT Auth & RBAC Security Lab"
+
+# 3. Set branch to main
+git branch -M main
+
+# 4. Link your remote GitHub repository
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+
+# 5. Push to GitHub
+git push -u origin main
+```
+
+### Step 2: Deploy to Vercel
+
+1. Go to your [Vercel Dashboard](https://vercel.com/new).
+2. Click **Import Project** and select your GitHub repository (`jwt-rbac`).
+3. Leave **Framework Preset** as **Other** (Static Site).
+4. Click **Deploy**. Vercel will automatically build and publish your project with global CDN caching and SSL support!
+
+---
+
 ## 📜 License
-MIT License - Free for educational and security research purposes.
+
+Distributed under the **MIT License**. Free for academic, educational, and security research use.
