@@ -1,6 +1,5 @@
 # 🛡️ JWT Authentication & Role-Based Access Control (RBAC) Security Lab
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Stack: Vanilla JS ES6+](https://img.shields.io/badge/Stack-HTML5%20%7C%20ES6%2B%20JS-yellow.svg)]()
 [![Security: JWT & RBAC](https://img.shields.io/badge/Security-JWT%20%26%20RBAC-success.svg)]()
 [![Vercel: Ready](https://img.shields.io/badge/Vercel-Deployment%20Ready-black.svg)]()
@@ -86,42 +85,6 @@ A comprehensive, interactive web application and security laboratory demonstrati
 
 ---
 
-## 📁 Repository Directory Tree
-
-```
-jwt-rbac/
-├── css/
-│   └── styles.css          # Clean light theme design system
-├── js/
-│   ├── app.js              # Application router & event coordinator
-│   ├── authState.js        # Central Auth State Provider & timer engine
-│   ├── components/
-│   │   ├── navbar.js       # Top navigation bar & storage selector
-│   │   ├── sidebar.js      # Navigation menu
-│   │   ├── loginModal.js   # Quick role identity switcher & login modal
-│   │   └── toast.js        # Toast notification system
-│   ├── utils/
-│   │   ├── jwtHelper.js    # Base64URL encoder/decoder & HMAC SHA-256 logic
-│   │   └── mockData.js     # Demo user accounts & permission matrices
-│   └── views/
-│       ├── dashboardView.js
-│       ├── contentView.js
-│       ├── adminView.js
-│       ├── auditLogsView.js
-│       ├── jwtInspectorView.js
-│       ├── rbacMatrixView.js
-│       ├── httpConsoleView.js
-│       ├── theoryDocsView.js
-│       └── forbiddenView.js
-├── index.html
-├── package.json
-├── vercel.json             # Vercel static routing configuration
-├── .gitignore
-└── README.md
-```
-
----
-
 ## 🚀 Quickstart & Local Development
 
 No heavy build tools or Node.js runtime required! The application runs natively in any modern browser.
@@ -137,40 +100,3 @@ npx serve .
 ```
 
 Open `http://localhost:8080` in your web browser.
-
----
-
-## 📤 GitHub & Vercel Deployment Instructions
-
-### Step 1: Push Repository to GitHub
-
-```bash
-# 1. Initialize git (if not initialized)
-git init
-
-# 2. Stage all files and commit
-git add .
-git commit -m "Initial commit: JWT Auth & RBAC Security Lab"
-
-# 3. Set branch to main
-git branch -M main
-
-# 4. Link your remote GitHub repository
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-
-# 5. Push to GitHub
-git push -u origin main
-```
-
-### Step 2: Deploy to Vercel
-
-1. Go to your [Vercel Dashboard](https://vercel.com/new).
-2. Click **Import Project** and select your GitHub repository (`jwt-rbac`).
-3. Leave **Framework Preset** as **Other** (Static Site).
-4. Click **Deploy**. Vercel will automatically build and publish your project with global CDN caching and SSL support!
-
----
-
-## 📜 License
-
-Distributed under the **MIT License**. Free for academic, educational, and security research use.
