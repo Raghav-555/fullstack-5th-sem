@@ -26,30 +26,33 @@ A comprehensive, interactive web application and security laboratory demonstrati
 4. **Secure Token Storage Management**: Evaluate client-side token storage strategies (`localStorage`, `sessionStorage`, and `In-Memory State`).
 5. **HTTP Authorization Interceptors**: Visualize how client-side applications attach `Authorization: Bearer <token>` HTTP headers for server middleware validation.
 
----
-
 ## 🏗️ Conceptual Architecture & Authentication Flow
 
-```
-+----------------+            1. POST /login (Credentials)          +----------------+
-|                | -----------------------------------------------> |                |
-|                |                                                  |                |
-|  Client App    |            2. Return Signed JWT (Header.Payload.Sig) |  Server / Auth  |
-|  (Browser SPA) | <----------------------------------------------- |    Engine      |
-|                |                                                  |                |
-|                |            3. Store Token (localStorage / Session) |                |
-+----------------+                                                  +----------------+
-        |
-        | 4. GET /api/admin/users
-        |    Header: "Authorization: Bearer <token>"
-        v
-+------------------------------------------------------------------------------------+
-|                             Server Authorization Middleware                        |
-|                                                                                    |
-| 1. Extract Token  ---> 2. Verify HMAC-SHA256 Signature  ---> 3. Check Expiry (exp) |
-|                                                                                    |
-| 4. Validate Role/Permission Claims ---> [200 OK] or [401 Unauthorized / 403 Forbidden]
-+------------------------------------------------------------------------------------+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as User / Browser
+    participant Client as Client App (SPA)
+    participant Auth as Auth Engine / Server
+    participant Middleware as Server Authorization Middleware
+
+    User->>Client: 1. Input Credentials (Email & Password)
+    Client->>Auth: 2. POST /login (Credentials)
+    Auth-->>Client: 3. Return Signed JWT (Header.Payload.Signature)
+    Note over Client: 4. Store Token in Client Storage (localStorage / sessionStorage)
+    
+    User->>Client: 5. Access Protected Feature (/admin)
+    Client->>Middleware: 6. GET /api/admin/users (Header: "Authorization: Bearer <token>")
+    
+    Note over Middleware: 7. Security Interception:<br/>• Extract Bearer Token<br/>• Verify HMAC-SHA256 Signature<br/>• Validate Expiration (exp)<br/>• Check Role Claims
+    
+    alt Valid Token & Authorized Role
+        Middleware-->>Client: 200 OK (Requested Resource Data)
+    else Invalid or Expired Token
+        Middleware-->>Client: 401 Unauthorized (Authentication Failed)
+    else Lacks Required Role Claims
+        Middleware-->>Client: 403 Forbidden (Access Denied Screen)
+    end
 ```
 
 ---
