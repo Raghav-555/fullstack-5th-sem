@@ -4,8 +4,7 @@
   "description": "Stateless JWT Authentication and Role-Based Access Control (RBAC) Web Security Lab",
   "main": "index.html",
   "scripts": {
-    "start": "python -m http.server 8080",
-    "build": "echo 'Static build ready for deployment'"
+    "start": "python -m http.server 8080"
   },
   "keywords": [
     "jwt",
@@ -15,6 +14,5 @@
     "security",
     "web-lab"
   ],
-  "author": "Cybersecurity Architecture Lab",
-  "license": "MIT"
+  "author": "Cybersecurity Architecture Lab"
 }
